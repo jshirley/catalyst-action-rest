@@ -1,0 +1,10 @@
+* Override setup_classes from Catalyst::Base, so things that use 
+  C::Controller:REST don't need to have ActionClass('REST') on them
+
+* Create generalized serializer/deserializer, that uses content_type to
+  choose
+
+* Document everything
+
+* More tests
+
