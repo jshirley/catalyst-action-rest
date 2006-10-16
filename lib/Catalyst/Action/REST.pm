@@ -11,6 +11,7 @@ use strict;
 use warnings;
 
 use base 'Catalyst::Action';
+use Class::Inspector;
 
 sub dispatch {
     my ( $self, $c ) = @_;
@@ -18,12 +19,29 @@ sub dispatch {
     my $controller = $self->class;
     my $method = $self->name . "_" . uc($c->request->method);
     if ($controller->can($method)) {
-        $c->log->debug("REST ActionClass is calling $method");
         return $controller->$method($c);
     } else {
-        $c->log->debug("REST ActionClass is calling " . $self->name);
+        $self->_return_405($c);
         return $c->execute( $self->class, $self );
     }
+}
+
+sub _return_405 {
+    my ( $self, $c ) = @_;
+
+    my $controller = $self->class;
+    my $methods = Class::Inspector->methods($controller);
+    my @allowed;
+    foreach my $method (@{$methods}) {
+        my $name = $self->name;
+        if ($method =~ /^$name\_(.+)$/) {
+            push(@allowed, $1);
+        }
+    }
+    $c->response->content_type('text/plain');
+    $c->response->status(405);
+    $c->response->header('Allow' => \@allowed);
+    $c->response->body("Method " . $c->request->method . " not implemented for " . $c->uri_for($self->reverse));
 }
 
 1;

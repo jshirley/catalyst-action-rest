@@ -12,20 +12,17 @@ use warnings;
 
 use base 'Catalyst::Action';
 use YAML::Syck;
-use Catalyst::Request::REST;
 
 sub execute {
     my $self = shift;
     my ( $controller, $c, $test ) = @_;
-   
-    my $nreq = bless($c->request, 'Catalyst::Request::REST');
-    $c->request($nreq);
-    if ($c->request->method eq "POST" || $c->request->method eq "PUT") {
+ 
+    my $body = $c->request->body;
+    if ($body) {
         my $rdata = LoadFile($c->request->body);
         $c->request->data($rdata);
-        $self->NEXT::execute( @_, );
     } else {
-        $self->NEXT::execute( @_ );
+        $c->log->debug('I would have deserialized, but there was nothing in the body!');
     }
 };
 

@@ -18,15 +18,6 @@ sub execute {
     my ( $controller, $c, $test ) = @_;
 
     my $stash_key = $controller->serialize->{'stash_key'} || 'rest';
-  
-    if (! $c->response->content_type ) {
-        $c->response->content_type($c->req->content_type);
-    }
-    return 1 if $c->req->method eq 'HEAD';
-    return 1 if length( $c->response->body );
-    return 1 if scalar @{ $c->error };
-    return 1 if $c->response->status =~ /^(?:204|3\d\d)$/;
-
     $c->response->output( Dump( $c->stash->{$stash_key} ) );
     return 1;
 };
