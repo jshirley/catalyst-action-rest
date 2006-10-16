@@ -24,36 +24,36 @@ sub execute {
     return 1 if $c->response->status =~ /^(?:204|3\d\d)$/;
 
     # Load the Serialize Classes
-    unless(defined($self->plugins)) {
+    unless ( defined( $self->plugins ) ) {
         my $mpo = Module::Pluggable::Object->new(
-            'require' => 1,
-            'search_path' => [ 'Catalyst::Action::Serialize' ],
+            'require'     => 1,
+            'search_path' => ['Catalyst::Action::Serialize'],
         );
         my @plugins = $mpo->plugins;
-        $self->plugins(\@plugins);
+        $self->plugins( \@plugins );
     }
 
     # Look up what serializer to use from content_type map
-    # 
+    #
     # If we don't find one, we use the default
     my $content_type = $c->request->content_type;
-    my $sclass = 'Catalyst::Action::Serialize::';
+    my $sclass       = 'Catalyst::Action::Serialize::';
     my $sarg;
     my $map = $controller->serialize->{'map'};
-    if (exists($map->{$content_type})) {
+    if ( exists( $map->{$content_type} ) ) {
         my $mc;
-        if (ref($map->{$content_type}) eq "ARRAY") {
-            $mc = $map->{$content_type}->[0];
+        if ( ref( $map->{$content_type} ) eq "ARRAY" ) {
+            $mc   = $map->{$content_type}->[0];
             $sarg = $map->{$content_type}->[1];
         } else {
             $mc = $map->{$content_type};
         }
         $sclass .= $mc;
-        if (! grep(/^$sclass$/, @{$self->plugins})) {
+        if ( !grep( /^$sclass$/, @{ $self->plugins } ) ) {
             die "Cannot find plugin $sclass for $content_type!";
         }
     } else {
-        if (exists($controller->serialize->{'default'})) {
+        if ( exists( $controller->serialize->{'default'} ) ) {
             $sclass .= $controller->serialize->{'default'};
         } else {
             die "I cannot find a default serializer!";
@@ -61,17 +61,17 @@ sub execute {
     }
 
     # Go ahead and serialize ourselves
-    if (defined($sarg)) {
-        $sclass->execute($controller, $c, $sarg);
+    if ( defined($sarg) ) {
+        $sclass->execute( $controller, $c, $sarg );
     } else {
-        $sclass->execute($controller, $c);
+        $sclass->execute( $controller, $c );
     }
 
-    if (! $c->response->content_type ) {
-        $c->response->content_type($c->request->content_type);
+    if ( !$c->response->content_type ) {
+        $c->response->content_type( $c->request->content_type );
     }
 
     return 1;
-};
+}
 
 1;

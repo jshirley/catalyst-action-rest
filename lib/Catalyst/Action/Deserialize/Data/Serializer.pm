@@ -16,23 +16,24 @@ use Data::Serializer;
 sub execute {
     my $self = shift;
     my ( $controller, $c, $serializer ) = @_;
- 
+
     my $body = $c->request->body;
     if ($body) {
         my $rbody;
-        if (-f $c->request->body) {
-            open(BODY, "<", $c->request->body);
-            while (my $line = <BODY>) {
+        if ( -f $c->request->body ) {
+            open( BODY, "<", $c->request->body );
+            while ( my $line = <BODY> ) {
                 $rbody .= $line;
             }
             close(BODY);
         }
-        my $dso = Data::Serializer->new(serializer => $serializer);
-        my $rdata = $dso->raw_deserialize($rbody);  
+        my $dso = Data::Serializer->new( serializer => $serializer );
+        my $rdata = $dso->raw_deserialize($rbody);
         $c->request->data($rdata);
     } else {
-        $c->log->debug('I would have deserialized, but there was nothing in the body!');
+        $c->log->debug(
+            'I would have deserialized, but there was nothing in the body!');
     }
-};
+}
 
 1;

@@ -20,6 +20,6 @@ sub execute {
     my $stash_key = $controller->serialize->{'stash_key'} || 'rest';
     $c->response->output( Dump( $c->stash->{$stash_key} ) );
     return 1;
-};
+}
 
 1;

@@ -17,9 +17,9 @@ sub execute {
     my ( $controller, $c, $serializer ) = @_;
 
     my $stash_key = $controller->serialize->{'stash_key'} || 'rest';
-    my $dso = Data::Serializer->new(serializer => $serializer);
+    my $dso = Data::Serializer->new( serializer => $serializer );
     $c->response->output( $dso->raw_serialize( $c->stash->{$stash_key} ) );
     return 1;
-};
+}
 
 1;
