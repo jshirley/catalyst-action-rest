@@ -3,7 +3,7 @@ use inc::Module::Install 0.64;
 perl_version '5.8.1';
 
 name 'Catalyst-Action-REST';
-all_from 'lib/Catalyst/Action/Rest.pm';
+all_from 'lib/Catalyst/Action/REST.pm';
 
 'Catalyst'                  => '5.7001',
 'Params::Validate'          => '0.76',
