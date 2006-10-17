@@ -57,15 +57,16 @@ mechanism described above.
 
 =cut
 sub dispatch {
-    my ( $self, $c ) = @_;
+    my $self = shift;
+    my $c = shift;
 
     my $controller = $self->class;
     my $method     = $self->name . "_" . uc( $c->request->method );
     if ( $controller->can($method) ) {
-        return $controller->$method($c);
+        return $controller->$method($c, @{$c->req->args});
     } else {
         $self->_return_405($c);
-        return $c->execute( $self->class, $self );
+        return $c->execute( $self->class, $self, @{$c->req->args} );
     }
 }
 
