@@ -71,6 +71,7 @@ sub status_not_found {
     );
 
     $c->response->status(404);
+    $c->response->content_type('text/plain');
     $c->response->body($p{'message'});
     return 1;
 }
