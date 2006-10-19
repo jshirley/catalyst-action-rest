@@ -71,8 +71,7 @@ sub status_bad_request {
     );
 
     $c->response->status(400);
-    $c->response->content_type('text/plain');
-    $c->response->body($p{'message'});
+    $self->_set_entity($c, { error => $p{'message'} });
     return 1;
 }
 
@@ -86,8 +85,7 @@ sub status_not_found {
     );
 
     $c->response->status(404);
-    $c->response->content_type('text/plain');
-    $c->response->body($p{'message'});
+    $self->_set_entity($c, { error => $p{'message'} });
     return 1;
 }
 

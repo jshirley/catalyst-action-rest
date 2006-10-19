@@ -7,3 +7,7 @@ Mon Oct 16 14:48:54 PDT 2006 (adam)
 Wed Oct 18 17:29:07 PDT 2006 (adam)
 	Added more status_ helpers
 
+Thu Oct 19 16:04:33 PDT 2006 (adam)
+	Converted error helpers to return an object instead of plain-text.  It's
+	  a more consistent model than a text/plain error message.
+
