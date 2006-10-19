@@ -61,6 +61,21 @@ sub status_ok {
     return 1;
 }
 
+sub status_bad_request {
+    my $self = shift;
+    my $c = shift;
+    my %p = validate(@_,
+        {
+            message => { type => SCALAR }, 
+        },
+    );
+
+    $c->response->status(400);
+    $c->response->content_type('text/plain');
+    $c->response->body($p{'message'});
+    return 1;
+}
+
 sub status_not_found {
     my $self = shift;
     my $c = shift;

@@ -3,3 +3,7 @@ Mon Oct 16 14:48:54 PDT 2006 (adam)
 	Created Catalyst::Action::Serialize and Catalyst::Action::Deserialize
 	Added Data::Serializer actions
 	Added status_created helper method
+
+Wed Oct 18 17:29:07 PDT 2006 (adam)
+	Added more status_ helpers
+
