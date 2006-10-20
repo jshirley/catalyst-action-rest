@@ -71,6 +71,7 @@ sub status_bad_request {
     );
 
     $c->response->status(400);
+    $c->log->debug("Status Bad Request: " . $p{'message'});
     $self->_set_entity($c, { error => $p{'message'} });
     return 1;
 }
@@ -85,6 +86,7 @@ sub status_not_found {
     );
 
     $c->response->status(404);
+    $c->log->debug("Status Not Found: " . $p{'message'});
     $self->_set_entity($c, { error => $p{'message'} });
     return 1;
 }
