@@ -46,6 +46,8 @@ If a method is requested that is not implemented, this action will
 return a status 405 (Method Not Found).  It will populate the "Allow" header 
 with the list of implemented request methods.
 
+It is likely that you really want to look at L<Catalyst::Controller::REST>.
+
 =head1 METHODS
 
 =over 4
@@ -105,6 +107,8 @@ L<Catalyst::Action::Serialize>, L<Catalyst::Action::Deserialize>
 =head1 AUTHOR
 
 Adam Jacob <adam@stalecoffee.org>, with lots of help from mst and jrockway
+
+Marchex, Inc. paid me while I developed this module.  (http://www.marchex.com)
 
 =head1 LICENSE
 

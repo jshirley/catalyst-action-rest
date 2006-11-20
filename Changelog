@@ -1,3 +1,7 @@
+Sun Nov 19 16:24:20 PST 2006 (adam)
+	Added status_accepted (Code 202)
+	Added a first pass at documentation.
+
 Mon Oct 16 14:48:54 PDT 2006 (adam)
 	Added in Test Suite
 	Created Catalyst::Action::Serialize and Catalyst::Action::Deserialize
