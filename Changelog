@@ -1,4 +1,8 @@
-Sun Nov 19 16:24:20 PST 2006 (adam)
+Thu Nov 30 17:14:51 PST 2006 (adam) - Release 0.2
+	Added documentation patch from Daisuke Maki (daisuke@endeworks.jp)
+	Added dependency patch from Daisuke Maki (daisuke@endeworks.jp)
+
+Sun Nov 19 16:24:20 PST 2006 (adam) - Release 0.1
 	Added status_accepted (Code 202)
 	Added a first pass at documentation.
 

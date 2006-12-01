@@ -15,7 +15,7 @@ use Class::Inspector;
 use 5.8.1;
 
 my 
-$VERSION = '0.1';
+$VERSION = '0.2';
 
 =head1 NAME
 
@@ -109,6 +109,10 @@ L<Catalyst::Action::Serialize>, L<Catalyst::Action::Deserialize>
 Adam Jacob <adam@stalecoffee.org>, with lots of help from mst and jrockway
 
 Marchex, Inc. paid me while I developed this module.  (http://www.marchex.com)
+
+=head1 CONTRIBUTERS
+
+Daisuke Maki <daisuke@endeworks.jp>
 
 =head1 LICENSE
 

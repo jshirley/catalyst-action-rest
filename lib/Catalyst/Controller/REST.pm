@@ -175,6 +175,8 @@ sub status_created {
     my $location;
     if (ref($p{'location'})) {
         $location = $p{'location'}->as_string;
+    } else {
+        $location = $p{'location'};
     }
     $c->response->status(201);
     $c->response->header('Location' => $location);
@@ -220,9 +222,7 @@ Example:
 
   $self->status_bad_request(
     $c, 
-    entity => {
-        message => "Cannot do what you have asked!",
-    }
+    message => "Cannot do what you have asked!",
   );
 
 =cut
@@ -251,9 +251,7 @@ Example:
 
   $self->status_not_found(
     $c, 
-    entity => {
-        message => "Cannot find what you were looking for!",
-    }
+    message => "Cannot find what you were looking for!",
   );
 
 =cut
