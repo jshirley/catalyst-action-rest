@@ -23,7 +23,9 @@ Catalyst::Action::REST - Automated REST Method Dispatching
 
 =head1 SYNOPSIS
 
-    sub foo :Local :ActionClass('REST') {}
+    sub foo :Local :ActionClass('REST') {
+      ... do setup for HTTP method specific handlers ...
+    }
 
     sub foo_GET { 
       ... do something for GET requests ...
@@ -44,9 +46,20 @@ the foo_GET method being dispatched.
 
 If a method is requested that is not implemented, this action will 
 return a status 405 (Method Not Found).  It will populate the "Allow" header 
-with the list of implemented request methods.
+with the list of implemented request methods.  You can override this behavior
+by implementing a custom 405 handler like so:
 
-It is likely that you really want to look at L<Catalyst::Controller::REST>.
+   sub foo_not_implemented {
+      ... handle not implemented methods ...
+   }
+
+If you do not provide an _OPTIONS subroutine, we will automatically respond
+with a 200 OK.  The "Allow" header will be populated with the list of
+implemented request methods.
+
+It is likely that you really want to look at L<Catalyst::Controller::REST>,
+which brings this class together with automatic Serialization of requests
+and responses.
 
 =head1 METHODS
 
