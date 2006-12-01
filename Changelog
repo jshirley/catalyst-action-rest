@@ -1,3 +1,19 @@
+Thu Nov 30 23:51:04 PST 2006 (adam)
+	Refactored the Catalyst::Action::REST dispatch, so that the default
+	  method is called before any _METHOD handlers.  In addition, moved
+	  the 405 Not Implemented handler to be foo_not_implemented, instead
+	  of the default sub.  (daisuke++ pointed out the inconsistency and
+	  provided a patch, and I added the foo_not_implemented support)
+
+    Added in automated OPTIONS handler, which constructs the allow
+	  header for you, just like the 405 handler.  Can be overridden
+	  with a normal _METHOD sub.
+
+	Refactored Test::Rest, so that it uses closures to create the
+	very similar $test->method() subs.
+
+	Added tests for Catalyst::Action::REST.
+
 Thu Nov 30 17:14:51 PST 2006 (adam) - Release 0.2
 	Added documentation patch from Daisuke Maki (daisuke@endeworks.jp)
 	Added dependency patch from Daisuke Maki (daisuke@endeworks.jp)

@@ -14,7 +14,7 @@ use base 'Catalyst::Action';
 use Class::Inspector;
 use 5.8.1;
 
-my 
+our
 $VERSION = '0.2';
 
 =head1 NAME
@@ -58,21 +58,40 @@ This method overrides the default dispatch mechanism to the re-dispatching
 mechanism described above.
 
 =cut
+
 sub dispatch {
     my $self = shift;
-    my $c = shift;
+    my $c    = shift;
 
     my $controller = $self->class;
     my $method     = $self->name . "_" . uc( $c->request->method );
     if ( $controller->can($method) ) {
-        return $controller->$method($c, @{$c->req->args});
+        $c->execute( $self->class, $self, @{ $c->req->args } );
+        return $controller->$method( $c, @{ $c->req->args } );
     } else {
-        $self->_return_405($c);
-        return $c->execute( $self->class, $self, @{$c->req->args} );
+        if ( $c->request->method eq "OPTIONS" ) {
+            return $self->_return_options($c);
+        } else {
+            my $handle_ni = $self->name . "_not_implemented";
+            if ( $controller->can($handle_ni) ) {
+                return $controller->$handle_ni( $c, @{ $c->req->args } );
+            } else {
+                return $self->_return_not_implemented($c);
+            }
+        }
     }
 }
 
-sub _return_405 {
+sub _return_options {
+    my ( $self, $c ) = @_;
+
+    my @allowed = $self->_get_allowed_methods($c);
+    $c->response->content_type('text/plain');
+    $c->response->status(200);
+    $c->response->header( 'Allow' => \@allowed );
+}
+
+sub _get_allowed_methods {
     my ( $self, $c ) = @_;
 
     my $controller = $self->class;
@@ -84,6 +103,13 @@ sub _return_405 {
             push( @allowed, $1 );
         }
     }
+    return @allowed;
+}
+
+sub _return_not_implemented {
+    my ( $self, $c ) = @_;
+
+    my @allowed = $self->_get_allowed_methods($c);
     $c->response->content_type('text/plain');
     $c->response->status(405);
     $c->response->header( 'Allow' => \@allowed );
@@ -119,3 +145,4 @@ Daisuke Maki <daisuke@endeworks.jp>
 You may distribute this code under the same terms as Perl itself.
 
 =cut
+
