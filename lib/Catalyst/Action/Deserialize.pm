@@ -9,7 +9,7 @@ package Catalyst::Action::Deserialize;
 use strict;
 use warnings;
 
-use base 'Catalyst::Action';
+use base 'Catalyst::Action::SerializeBase';
 use Module::Pluggable::Object;
 use Catalyst::Request::REST;
 
@@ -17,55 +17,32 @@ __PACKAGE__->mk_accessors(qw(plugins));
 
 sub execute {
     my $self = shift;
-    my ( $controller, $c, $test ) = @_;
+    my ( $controller, $c ) = @_;
 
     my $nreq = bless( $c->request, 'Catalyst::Request::REST' );
     $c->request($nreq);
 
-    unless ( defined( $self->plugins ) ) {
-        my $mpo = Module::Pluggable::Object->new(
-            'require'     => 1,
-            'search_path' => ['Catalyst::Action::Deserialize'],
-        );
-        my @plugins = $mpo->plugins;
-        $self->plugins( \@plugins );
-    }
-    my $content_type = $c->request->content_type;
-    my $sclass       = 'Catalyst::Action::Deserialize::';
-    my $sarg;
-    my $map = $controller->serialize->{'map'};
-    if ( exists( $map->{$content_type} ) ) {
-        my $mc;
-        if ( ref( $map->{$content_type} ) eq "ARRAY" ) {
-            $mc   = $map->{$content_type}->[0];
-            $sarg = $map->{$content_type}->[1];
-        } else {
-            $mc = $map->{$content_type};
-        }
-        $sclass .= $mc;
-        if ( !grep( /^$sclass$/, @{ $self->plugins } ) ) {
-            die "Cannot find plugin $sclass for $content_type!";
-        }
-    } else {
-        if ( exists( $controller->serialize->{'default'} ) ) {
-            $sclass .= $controller->serialize->{'default'};
-        } else {
-            die "I cannot find a default serializer!";
-        }
-    }
-
     my @demethods = qw(POST PUT OPTIONS);
     my $method    = $c->request->method;
     if ( grep /^$method$/, @demethods ) {
+        my ($sclass, $sarg, $content_type) = $self->_load_content_plugins('Catalyst::Action::Deserialize', $controller, $c);        
+        return 1 unless defined ($sclass);
+        my $rc;
         if ( defined($sarg) ) {
-            $sclass->execute( $controller, $c, $sarg );
+            $rc = $sclass->execute( $controller, $c, $sarg );
         } else {
-            $sclass->execute( $controller, $c );
+            $rc = $sclass->execute( $controller, $c );
         }
-        $self->NEXT::execute( @_, );
-    } else {
-        $self->NEXT::execute(@_);
-    }
+        if ($rc eq "0") {
+            return $self->_unsupported_media_type($c, $content_type);
+        } elsif ($rc ne "1") {
+            return $self->_serialize_bad_request($c, $content_type, $rc);
+        }
+    } 
+
+    $self->NEXT::execute( @_ );
+
+    return 1;
 }
 
 =head1 NAME
@@ -87,7 +64,7 @@ Catalyst::Action::Deserialize - Deserialize Data in a Request
         }
     );
 
-    sub begin : ActionClass('Deserialize') {}
+    sub begin :ActionClass('Deserialize') {}
 
 =head1 DESCRIPTION
 
@@ -97,7 +74,7 @@ The serializer is selected by introspecting the requests content-type
 header.
 
 It requires that your Catalyst controller have a "serialize" entry
-in it's configuration.
+in it's configuration.  See L<Catalyst::Action::Serialize> for the details.
 
 The specifics of deserializing each content-type is implemented as
 a plugin to L<Catalyst::Action::Deserialize>.  You can see a list
@@ -106,20 +83,13 @@ of currently implemented plugins in L<Catalyst::Controller::REST>.
 The results of your Deserializing will wind up in $c->req->data.
 This is done through the magic of L<Catalyst::Request::REST>.
 
-=head1 CONFIGURATION
+While it is common for this Action to be called globally as a
+C<begin> method, there is nothing stopping you from using it on a
+single routine:
 
-=over 4
+   sub foo :Local :Action('Deserialize') {}
 
-=item default
-
-The default Serialization format.  See the next section for
-available options.
-
-=item map
-
-Takes a hashref, mapping Content-Types to a given plugin.
-
-=back
+Will work just fine.
 
 =head1 SEE ALSO
 

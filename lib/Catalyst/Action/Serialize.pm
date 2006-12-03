@@ -9,67 +9,35 @@ package Catalyst::Action::Serialize;
 use strict;
 use warnings;
 
-use base 'Catalyst::Action';
+use base 'Catalyst::Action::SerializeBase';
 use Module::Pluggable::Object;
-
-__PACKAGE__->mk_accessors(qw(plugins));
+use Data::Dump qw(dump);
 
 sub execute {
     my $self = shift;
     my ( $controller, $c ) = @_;
+
+    $self->NEXT::execute( @_ );
 
     return 1 if $c->req->method eq 'HEAD';
     return 1 if length( $c->response->body );
     return 1 if scalar @{ $c->error };
     return 1 if $c->response->status =~ /^(?:204|3\d\d)$/;
 
-    # Load the Serialize Classes
-    unless ( defined( $self->plugins ) ) {
-        my $mpo = Module::Pluggable::Object->new(
-            'require'     => 1,
-            'search_path' => ['Catalyst::Action::Serialize'],
-        );
-        my @plugins = $mpo->plugins;
-        $self->plugins( \@plugins );
-    }
+    my ($sclass, $sarg, $content_type) = $self->_load_content_plugins("Catalyst::Action::Serialize", $controller, $c);
+    return 1 unless defined $sclass;
 
-    # Look up what serializer to use from content_type map
-    #
-    # If we don't find one, we use the default
-    my $content_type = $c->request->content_type;
-    my $sclass       = 'Catalyst::Action::Serialize::';
-    my $sarg;
-    my $map = $controller->serialize->{'map'};
-    if ( exists( $map->{$content_type} ) ) {
-        my $mc;
-        if ( ref( $map->{$content_type} ) eq "ARRAY" ) {
-            $mc   = $map->{$content_type}->[0];
-            $sarg = $map->{$content_type}->[1];
-        } else {
-            $mc = $map->{$content_type};
-        }
-        $sclass .= $mc;
-        if ( !grep( /^$sclass$/, @{ $self->plugins } ) ) {
-            die "Cannot find plugin $sclass for $content_type!";
-        }
-    } else {
-        if ( exists( $controller->serialize->{'default'} ) ) {
-            $sclass .= $controller->serialize->{'default'};
-        } else {
-            die "I cannot find a default serializer!";
-        }
-    }
-
-    # Go ahead and serialize ourselves
+    my $rc;
     if ( defined($sarg) ) {
-        $sclass->execute( $controller, $c, $sarg );
+        $rc = $sclass->execute( $controller, $c, $sarg );
     } else {
-        $sclass->execute( $controller, $c );
+        $rc = $sclass->execute( $controller, $c );
     }
-
-    if ( !$c->response->content_type ) {
-        $c->response->content_type( $c->request->content_type );
-    }
+    if ($rc eq 0) {
+        return $self->_unsupported_media_type($c, $content_type);
+    } elsif ($rc ne 1) {
+        return $self->_serialize_bad_request($c, $content_type, $rc);
+    } 
 
     return 1;
 }
@@ -95,18 +63,26 @@ Catalyst::Action::Serialize - Serialize Data in a Response
         }
     );
 
-    sub end : ActionClass('Serialize') {}
+    sub end :ActionClass('Serialize') {}
 
 =head1 DESCRIPTION
 
 This action will serialize the body of an HTTP Response.  The serializer is
-selected by introspecting the requests content-type header.
+selected by introspecting the HTTP Requests content-type header.
 
 It requires that your Catalyst controller have a "serialize" entry
-in it's configuration.
+in it's configuration, which sets up the mapping between Content Type's
+and Serialization classes.
 
 The specifics of serializing each content-type is implemented as
 a plugin to L<Catalyst::Action::Serialize>.
+
+Typically, you would use this ActionClass on your C<end> method.  However,
+nothing is stopping you from choosing specific methods to Serialize:
+
+  sub foo :Local :ActionClass('Serialize') {
+     .. populate stash with data ..
+  }
 
 =head1 CONFIGURATION
 
@@ -120,7 +96,10 @@ is not recognized.
 
 =item stash_key 
 
-Where in the stash the data you want serialized lives.
+We will serialize the data that lives in this location in the stash.  So
+if the value is "rest", we will serialize the data under:
+
+  $c->stash->{'rest'}
 
 =item map
 
@@ -128,10 +107,16 @@ Takes a hashref, mapping Content-Types to a given plugin.
 
 =back
 
+=head1 HELPFUL PEOPLE
+
+Daisuke Maki pointed out that early versions of this Action did not play
+well with others, or generally behave in a way that was very consistent
+with the rest of Catalyst. 
+
 =head1 SEE ALSO
 
 You likely want to look at L<Catalyst::Controller::REST>, which implements
-a sensible set of defaults for a controller doing REST.
+a sensible set of defaults for doing a REST controller.
 
 L<Catalyst::Action::Deserialize>, L<Catalyst::Action::REST>
 

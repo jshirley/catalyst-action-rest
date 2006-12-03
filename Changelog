@@ -1,3 +1,12 @@
+Sun Dec  3 12:24:16 PST 2006 (adam)
+	Fixed things so that not having a Serialization module returns 415.
+	Fixed things so that failure to Deserialize sends the proper status.
+	Refactored the Plugin loading to Catalyst::Action::SerializeBase.
+	Updated the Documentation.
+	Added a whole raft of serializers. (JSON, all the Data::Serializer
+	  supported ones, and XML::Simple)
+	Added test cases.
+
 Thu Nov 30 23:51:04 PST 2006 (adam)
 	Refactored the Catalyst::Action::REST dispatch, so that the default
 	  method is called before any _METHOD handlers.  In addition, moved

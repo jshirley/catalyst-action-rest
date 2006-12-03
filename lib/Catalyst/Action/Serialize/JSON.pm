@@ -1,17 +1,17 @@
 #
-# Catlyst::Action::Serialize::YAML.pm
+# Catlyst::Action::Serialize::JSON.pm
 # Created by: Adam Jacob, Marchex, <adam@marchex.com>
 # Created on: 10/12/2006 03:00:32 PM PDT
 #
 # $Id$
 
-package Catalyst::Action::Serialize::YAML;
+package Catalyst::Action::Serialize::JSON;
 
 use strict;
 use warnings;
 
 use base 'Catalyst::Action';
-use YAML::Syck;
+use JSON::Syck;
 
 sub execute {
     my $self = shift;
@@ -20,7 +20,7 @@ sub execute {
     my $stash_key = $controller->config->{'serialize'}->{'stash_key'} || 'rest';
     my $output;
     eval {
-        $output = Dump($c->stash->{$stash_key});
+        $output = JSON::Syck::Dump($c->stash->{$stash_key});
     };
     if ($@) {
         return $@;

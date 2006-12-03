@@ -1,17 +1,17 @@
 #
-# Catlyst::Action::Deserialize::YAML.pm
+# Catlyst::Action::Deserialize::JSON.pm
 # Created by: Adam Jacob, Marchex, <adam@marchex.com>
 # Created on: 10/12/2006 03:00:32 PM PDT
 #
 # $Id$
 
-package Catalyst::Action::Deserialize::YAML;
+package Catalyst::Action::Deserialize::JSON;
 
 use strict;
 use warnings;
 
 use base 'Catalyst::Action';
-use YAML::Syck;
+use JSON::Syck;
 
 sub execute {
     my $self = shift;
@@ -20,8 +20,12 @@ sub execute {
     my $body = $c->request->body;
     if ($body) {
         my $rdata;
+        my $rbody;
+        while (my $line = <$body>) {
+            $rbody .= $line;
+        }
         eval {
-            $rdata = LoadFile( $c->request->body );
+            $rdata = JSON::Syck::Load( $rbody );
         };
         if ($@) {
             return $@;

@@ -1,26 +1,34 @@
 #
-# Catlyst::Action::Serialize::YAML.pm
+# Catlyst::Action::Serialize::XML::Simple.pm
 # Created by: Adam Jacob, Marchex, <adam@marchex.com>
 # Created on: 10/12/2006 03:00:32 PM PDT
 #
 # $Id$
 
-package Catalyst::Action::Serialize::YAML;
+package Catalyst::Action::Serialize::XML::Simple;
 
 use strict;
 use warnings;
 
 use base 'Catalyst::Action';
-use YAML::Syck;
 
 sub execute {
     my $self = shift;
     my ( $controller, $c ) = @_;
 
+    eval {
+        require XML::Simple
+    };
+    if ($@) {
+        $c->log->debug("Could not load XML::Serializer, refusing to serialize: $@");
+        return 0;
+    }
+    my $xs = XML::Simple->new(ForceArray => 0,);
+
     my $stash_key = $controller->config->{'serialize'}->{'stash_key'} || 'rest';
     my $output;
     eval {
-        $output = Dump($c->stash->{$stash_key});
+        $output = $xs->XMLout({ data => $c->stash->{$stash_key} });
     };
     if ($@) {
         return $@;
