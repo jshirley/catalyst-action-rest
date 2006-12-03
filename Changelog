@@ -1,4 +1,8 @@
-Sun Dec  3 12:24:16 PST 2006 (adam)
+Sun Dec  3 12:24:16 PST 2006 (adam) - Release 0.30
+	Updated the Makefile to support optional installation of the different
+	  Serialization formats.
+	Renamed some of the test cases, since the execution order doesn't
+	  matter.
 	Fixed things so that not having a Serialization module returns 415.
 	Fixed things so that failure to Deserialize sends the proper status.
 	Refactored the Plugin loading to Catalyst::Action::SerializeBase.

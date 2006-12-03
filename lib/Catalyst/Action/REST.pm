@@ -15,7 +15,7 @@ use Class::Inspector;
 use 5.8.1;
 
 our
-$VERSION = '0.2';
+$VERSION = '0.30';
 
 =head1 NAME
 
