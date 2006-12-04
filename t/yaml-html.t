@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More qw(no_plan);
+use Test::More tests => 4;
 use YAML::Syck;
 use FindBin;
 use Data::Dump qw(dump);
