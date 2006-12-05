@@ -29,7 +29,7 @@ sub execute {
                               sub {
                                   my($uri, $orig_uri) = @_;
                                   my $newuri;
-                                  if ($uri =~ /?/) {
+                                  if ($uri =~ /\?/) {
                                       $newuri = $uri . "&content-type=text/html";
                                   } else {
                                       $newuri = $uri . "?content-type=text/html";
