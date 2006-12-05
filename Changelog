@@ -1,3 +1,7 @@
+Tue Dec  5 13:02:08 PST 2006 (adam)
+	Made the YAML::HTML view automatically append content-type=text/html on
+	  the resulting URLs.
+
 Sun Dec  3 12:24:16 PST 2006 (adam) - Release 0.30
 	Updated the Makefile to support optional installation of the different
 	  Serialization formats.

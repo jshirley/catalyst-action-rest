@@ -28,7 +28,13 @@ sub execute {
     my $finder = URI::Find->new(
                               sub {
                                   my($uri, $orig_uri) = @_;
-                                  return qq|<a href="$uri">$orig_uri</a>|;
+                                  my $newuri;
+                                  if ($uri =~ /?/) {
+                                      $newuri = $uri . "&content-type=text/html";
+                                  } else {
+                                      $newuri = $uri . "?content-type=text/html";
+                                  }
+                                  return qq|<a href="$newuri">$orig_uri</a>|;
                               });
     $finder->find(\$text);
     $output .= $text;
