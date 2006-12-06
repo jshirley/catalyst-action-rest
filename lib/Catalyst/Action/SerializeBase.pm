@@ -139,7 +139,7 @@ sub _unsupported_media_type {
     my ( $self, $c, $content_type ) = @_;
     $c->res->content_type('text/plain');
     $c->res->status(415);
-    if (defined($content_type)) {
+    if (defined($content_type) && $content_type ne "") {
         $c->res->body(
             "Content-Type " . $content_type . " is not supported.\r\n" );
     } else {

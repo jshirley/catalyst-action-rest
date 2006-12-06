@@ -1,3 +1,7 @@
+Wed Dec  6 00:45:02 PST 2006 (adam) - Release 0.31
+	Fixed a bug where we would report a blank content-type negotiation.
+	Added Data::Dump as a dependency.
+
 Tue Dec  5 13:02:08 PST 2006 (adam)
 	Made the YAML::HTML view automatically append content-type=text/html on
 	  the resulting URLs.
