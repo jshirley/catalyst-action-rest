@@ -9,4 +9,5 @@
 
 * More tests
 
-* Make the different Serialization mechanisms no longer required.
+* Add a preference weight for what type of content to return given an
+  equal weight Accept header.
