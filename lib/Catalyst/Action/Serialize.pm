@@ -25,7 +25,11 @@ sub execute {
     return 1 if $c->response->status =~ /^(?:204|3\d\d)$/;
 
     my ($sclass, $sarg, $content_type) = $self->_load_content_plugins("Catalyst::Action::Serialize", $controller, $c);
-    return 1 unless defined $sclass;
+    unless ( defined($sclass) ) {
+        $c->log->debug("Could not find a serializer for $content_type");
+        return 1;
+    }
+    $c->log->debug("Serializing with $sclass" . ($sarg ? " [$sarg]" : ''));
 
     my $rc;
     if ( defined($sarg) ) {
