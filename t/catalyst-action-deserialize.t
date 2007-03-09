@@ -2,7 +2,7 @@ package Test::Catalyst::Action::Deserialize;
 
 use FindBin;
 
-use lib ("$FindBin::Bin/../lib");
+use lib ("$FindBin::Bin/../lib", "$FindBin::Bin/lib" );
 
 use strict;
 use warnings;

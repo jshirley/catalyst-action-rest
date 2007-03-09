@@ -1,3 +1,10 @@
+Fri Mar  9 14:13:29 PST 2007 (adam) - Release 0.40
+  Refactored the Content-Type negotiation to live in Catalyst::Request::REST. 
+    (drolsky)
+  Added some useful debugging. (drolsky)
+  Added a View serializer/deserializer, which simply calls the correct 
+    Catalyst view.  ('text/html' => [ 'View', 'TT' ]) (claco, adam)
+
 Wed Dec  6 00:45:02 PST 2006 (adam) - Release 0.31
 	Fixed a bug where we would report a blank content-type negotiation.
 	Added Data::Dump as a dependency.

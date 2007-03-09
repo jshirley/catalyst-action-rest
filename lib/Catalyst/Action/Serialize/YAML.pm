@@ -1,5 +1,5 @@
 #
-# Catlyst::Action::Serialize::YAML.pm
+# Catalyst::Action::Serialize::YAML.pm
 # Created by: Adam Jacob, Marchex, <adam@marchex.com>
 # Created on: 10/12/2006 03:00:32 PM PDT
 #

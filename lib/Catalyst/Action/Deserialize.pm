@@ -11,7 +11,6 @@ use warnings;
 
 use base 'Catalyst::Action::SerializeBase';
 use Module::Pluggable::Object;
-use Catalyst::Request::REST;
 
 __PACKAGE__->mk_accessors(qw(plugins));
 
@@ -19,28 +18,27 @@ sub execute {
     my $self = shift;
     my ( $controller, $c ) = @_;
 
-    my $nreq = bless( $c->request, 'Catalyst::Request::REST' );
-    $c->request($nreq);
-
     my @demethods = qw(POST PUT OPTIONS);
     my $method    = $c->request->method;
     if ( grep /^$method$/, @demethods ) {
-        my ($sclass, $sarg, $content_type) = $self->_load_content_plugins('Catalyst::Action::Deserialize', $controller, $c);        
-        return 1 unless defined ($sclass);
+        my ( $sclass, $sarg, $content_type ) =
+          $self->_load_content_plugins( 'Catalyst::Action::Deserialize',
+            $controller, $c );
+        return 1 unless defined($sclass);
         my $rc;
         if ( defined($sarg) ) {
             $rc = $sclass->execute( $controller, $c, $sarg );
         } else {
             $rc = $sclass->execute( $controller, $c );
         }
-        if ($rc eq "0") {
-            return $self->_unsupported_media_type($c, $content_type);
-        } elsif ($rc ne "1") {
-            return $self->_serialize_bad_request($c, $content_type, $rc);
+        if ( $rc eq "0" ) {
+            return $self->_unsupported_media_type( $c, $content_type );
+        } elsif ( $rc ne "1" ) {
+            return $self->_serialize_bad_request( $c, $content_type, $rc );
         }
-    } 
+    }
 
-    $self->NEXT::execute( @_ );
+    $self->NEXT::execute(@_);
 
     return 1;
 }
@@ -90,6 +88,9 @@ single routine:
    sub foo :Local :Action('Deserialize') {}
 
 Will work just fine.
+
+When you use this module, the request class will be changed to
+L<Catalyst::Request::REST>.
 
 =head1 SEE ALSO
 

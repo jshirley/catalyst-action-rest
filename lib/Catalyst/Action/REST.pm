@@ -12,10 +12,17 @@ use warnings;
 
 use base 'Catalyst::Action';
 use Class::Inspector;
+use Catalyst::Request::REST;
 use 5.8.1;
 
 our
-$VERSION = '0.31';
+    $VERSION = '0.40';
+
+# This is wrong in several ways. First, there's no guarantee that
+# Catalyst.pm has not been subclassed. Two, there's no guarantee that
+# the user isn't already using their request subclass.
+Catalyst->request_class('Catalyst::Request::REST')
+    unless Catalyst->request_class->isa('Catalyst::Request::REST');
 
 =head1 NAME
 
@@ -60,6 +67,9 @@ implemented request methods.
 It is likely that you really want to look at L<Catalyst::Controller::REST>,
 which brings this class together with automatic Serialization of requests
 and responses.
+
+When you use this module, the request class will be changed to
+L<Catalyst::Request::REST>.
 
 =head1 METHODS
 

@@ -158,6 +158,16 @@ you serialize be a HASHREF, we transform outgoing data to be in the form of:
 
   { data => $yourdata }
 
+=item L<View>
+
+Uses a regular Catalyst view.  For example, if you wanted to have your 
+C<text/html> and C<text/xml> views rendered by TT:
+
+	'text/html' => [ 'View', 'TT' ],
+	'text/xml'  => [ 'View', 'XML' ],
+	
+Will do the trick nicely. 
+
 =back
 
 By default, L<Catalyst::Controller::REST> will return a C<415 Unsupported Media Type> response if an attempt to use an unsupported content-type is made.  You
@@ -416,8 +426,7 @@ This class provides a default configuration for Serialization.  It is currently:
 ],
             'text/x-config-general' => [ 'Data::Serializer', 'Config::General' ]
 ,
-            'text/x-php-serialization' => [ 'Data::Serializer', 'PHP::Serializat
-ion' ],
+            'text/x-php-serialization' => [ 'Data::Serializer', 'PHP::Serialization' ],
           },
       }
   );

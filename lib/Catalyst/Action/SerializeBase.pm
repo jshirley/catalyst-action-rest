@@ -12,7 +12,10 @@ use warnings;
 use base 'Catalyst::Action';
 use Module::Pluggable::Object;
 use Data::Dump qw(dump);
-use HTTP::Headers::Util qw(split_header_words);
+use Catalyst::Request::REST;
+
+Catalyst->request_class('Catalyst::Request::REST')
+    unless Catalyst->request_class->isa('Catalyst::Request::REST');
 
 __PACKAGE__->mk_accessors(qw(_serialize_plugins _loaded_plugins));
 
@@ -33,48 +36,7 @@ sub _load_content_plugins {
         $self->_serialize_plugins( \@plugins );
     }
 
-    # First, we use the content type in the HTTP Request.  It wins all.
-    my $content_type = $c->request->content_type || '';
-
-    # Second, we allow GET requests to tunnel the content-type as
-    #  a query param.
-    if (!$content_type && $c->req->method eq "GET" && $c->req->param('content-type')) {
-
-        $content_type = $c->req->param('content-type');
-    }
-
-    # Third, we parse the Accept header, and see if the client
-    # takes a format we understand.
-    #
-    # This is taken from chansen's Apache2::UploadProgress.
-    my $used_accept = 0;
-    if ( !$content_type && $c->request->header('Accept') ) {
-        my $accept_header = $c->request->header('Accept');
-        my %accept        = ();
-        my $counter       = 0;
-
-        foreach my $pair ( split_header_words($accept_header) ) {
-
-            my ( $type, $qvalue ) = @{$pair}[ 0, 3 ];
-
-            unless ( defined $qvalue ) {
-                $qvalue = 1 - ( ++$counter / 1000 );
-            }
-
-            $accept{$type} = sprintf( '%.3f', $qvalue );
-        }
-
-        foreach my $type ( sort { $accept{$b} <=> $accept{$a} } keys %accept )
-        {
-
-            if ( exists $controller->config->{'serialize'}->{'map'}->{$type} )
-            {
-                $content_type = $type;
-                last;
-            }
-        }
-        $used_accept = 1;
-    }
+    my $content_type = $c->request->preferred_content_type;
 
     # Finally, we load the class.  If you have a default serializer,
     # and we still don't have a content-type that exists in the map,
@@ -126,7 +88,7 @@ sub _load_content_plugins {
     if ($search_path eq "Catalyst::Action::Serialize") {
         if ($content_type) {
             $c->response->header( 'Vary' => 'Content-Type' );
-        } elsif ($used_accept) {
+        } elsif ($c->request->accept_only) {
             $c->response->header( 'Vary' => 'Accept' );
         }
         $c->response->content_type($content_type);
