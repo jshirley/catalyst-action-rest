@@ -16,7 +16,7 @@ use Catalyst::Request::REST;
 use 5.8.1;
 
 our
-    $VERSION = '0.40';
+    $VERSION = '0.41';
 
 # This is wrong in several ways. First, there's no guarantee that
 # Catalyst.pm has not been subclassed. Two, there's no guarantee that
@@ -86,7 +86,7 @@ sub dispatch {
     my $self = shift;
     my $c    = shift;
 
-    my $controller = $self->class;
+    my $controller = $c->component($self->class);
     my $method     = $self->name . "_" . uc( $c->request->method );
     if ( $controller->can($method) ) {
         $c->execute( $self->class, $self, @{ $c->req->args } );

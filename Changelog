@@ -1,3 +1,6 @@
+Thu May 24 14:01:06 PDT 2007 (adam) - Release 0.41
+  Moved a bogus $self->class to $c->component($self->class)
+
 Fri Mar  9 14:13:29 PST 2007 (adam) - Release 0.40
   Refactored the Content-Type negotiation to live in Catalyst::Request::REST. 
     (drolsky)
