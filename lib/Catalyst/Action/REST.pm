@@ -16,13 +16,13 @@ use Catalyst::Request::REST;
 use 5.8.1;
 
 our
-    $VERSION = '0.41';
+   $VERSION = '0.41';
 
 # This is wrong in several ways. First, there's no guarantee that
 # Catalyst.pm has not been subclassed. Two, there's no guarantee that
 # the user isn't already using their request subclass.
 Catalyst->request_class('Catalyst::Request::REST')
-    unless Catalyst->request_class->isa('Catalyst::Request::REST');
+  unless Catalyst->request_class->isa('Catalyst::Request::REST');
 
 =head1 NAME
 
@@ -86,7 +86,7 @@ sub dispatch {
     my $self = shift;
     my $c    = shift;
 
-    my $controller = $c->component($self->class);
+    my $controller = $c->component( $self->class );
     my $method     = $self->name . "_" . uc( $c->request->method );
     if ( $controller->can($method) ) {
         $c->execute( $self->class, $self, @{ $c->req->args } );
