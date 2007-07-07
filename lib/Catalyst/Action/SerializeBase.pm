@@ -44,6 +44,17 @@ sub _load_content_plugins {
     my $sclass = $search_path . "::";
     my $sarg;
     my $map = $controller->config->{'serialize'}->{'map'};
+
+    # If we don't have a handler for our preferred content type, try
+    # the default
+    if ( ! exists $map->{$content_type} ) {
+        if( exists $controller->config->{'serialize'}->{'default'} ) {
+            $content_type = $controller->config->{'serialize'}->{'default'} ;
+        } else {
+            return $self->_unsupported_media_type($c, $content_type);
+        }
+    }
+
     if ( exists( $map->{$content_type} ) ) {
         my $mc;
         if ( ref( $map->{$content_type} ) eq "ARRAY" ) {
@@ -64,11 +75,7 @@ sub _load_content_plugins {
             return $self->_unsupported_media_type($c, $content_type);
         }
     } else {
-        if ( exists( $controller->config->{'serialize'}->{'default'} ) ) {
-            $sclass .= $controller->config->{'serialize'}->{'default'};
-        } else {
-            return $self->_unsupported_media_type($c, $content_type);
-        }
+        return $self->_unsupported_media_type($c, $content_type);
     }
     unless ( exists( $self->_loaded_plugins->{$sclass} ) ) {
         my $load_class = $sclass;

@@ -66,10 +66,10 @@ Catalyst::Action::Serialize - Serialize Data in a Response
 
     __PACKAGE__->config(
         serialize => {
-            'default'   => 'YAML',
+            'default'   => 'text/x-yaml',
             'stash_key' => 'rest',
             'map'       => {
-				'text/html'          => [ 'View', 'TT', ],
+                'text/html'          => [ 'View', 'TT', ],
                 'text/x-yaml'        => 'YAML',
                 'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
             },
@@ -106,9 +106,10 @@ L<Catalyst::Request::REST>.
 
 =item default
 
-The default Serialization format.  See the next section for
-available options.  This is used if a requested content-type
-is not recognized.
+The Content-Type of the default Serialization format.  This must be a
+Content-Type associated with a plugin in the "map" section below.  
+
+This is used if a requested content-type is not recognized.
 
 =item stash_key 
 

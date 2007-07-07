@@ -170,13 +170,14 @@ Will do the trick nicely.
 
 =back
 
-By default, L<Catalyst::Controller::REST> will return a C<415 Unsupported Media Type> response if an attempt to use an unsupported content-type is made.  You
-can ensure that something is always returned by setting the C<default> config
-option:
+By default, L<Catalyst::Controller::REST> will return a C<415 Unsupported Media Type>
+response if an attempt to use an unsupported content-type is made.  You
+can ensure that something is always returned by setting the C<default>
+config option:
 
-   __PACKAGE__->config->{'serialize'}->{'default'} = 'YAML';
+   __PACKAGE__->config->{'serialize'}->{'default'} = 'text/x-yaml';
 
-Would make it always fall back to YAML.
+Would make it always fall back to the serializer plugin defined for text/x-yaml.
 
 Implementing new Serialization formats is easy!  Contributions
 are most welcome!  See L<Catalyst::Action::Serialize> and

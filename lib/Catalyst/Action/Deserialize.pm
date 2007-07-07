@@ -53,7 +53,7 @@ Catalyst::Action::Deserialize - Deserialize Data in a Request
 
     __PACKAGE__->config(
         serialize => {
-            'default'   => 'YAML',
+            'default'   => 'text/x-yaml',
             'stash_key' => 'rest',
             'map'       => {
                 'text/x-yaml'        => 'YAML',
