@@ -16,7 +16,7 @@ use Catalyst::Request::REST;
 use 5.8.1;
 
 our
-   $VERSION = '0.41';
+   $VERSION = '0.50';
 
 # This is wrong in several ways. First, there's no guarantee that
 # Catalyst.pm has not been subclassed. Two, there's no guarantee that
