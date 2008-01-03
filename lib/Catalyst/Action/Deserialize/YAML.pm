@@ -21,7 +21,8 @@ sub execute {
     if ($body) {
         my $rdata;
         eval {
-            $rdata = LoadFile( $c->request->body );
+            my $body = $c->request->body;
+            $rdata = LoadFile( "$body" );
         };
         if ($@) {
             return $@;
