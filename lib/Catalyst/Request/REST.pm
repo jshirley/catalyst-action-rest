@@ -87,7 +87,6 @@ sub accepted_content_types {
         if $self->content_type;
 
     if ($self->method eq "GET" && $self->param('content-type')) {
-
         $types{ $self->param('content-type') } = 2;
     }
 

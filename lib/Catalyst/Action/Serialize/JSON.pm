@@ -17,7 +17,11 @@ sub execute {
     my $self = shift;
     my ( $controller, $c ) = @_;
 
-    my $stash_key = $controller->config->{'serialize'}->{'stash_key'} || 'rest';
+    my $stash_key = (
+            $controller->config->{'serialize'} ?
+                $controller->config->{'serialize'}->{'stash_key'} :
+                $controller->config->{'stash_key'} 
+        ) || 'rest';
     my $output;
     eval {
         $output = JSON::Syck::Dump($c->stash->{$stash_key});

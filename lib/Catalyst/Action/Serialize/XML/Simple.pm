@@ -25,7 +25,11 @@ sub execute {
     }
     my $xs = XML::Simple->new(ForceArray => 0,);
 
-    my $stash_key = $controller->config->{'serialize'}->{'stash_key'} || 'rest';
+    my $stash_key = (
+            $controller->config->{'serialize'} ?
+                $controller->config->{'serialize'}->{'stash_key'} :
+                $controller->config->{'stash_key'} 
+        ) || 'rest';
     my $output;
     eval {
         $output = $xs->XMLout({ data => $c->stash->{$stash_key} });

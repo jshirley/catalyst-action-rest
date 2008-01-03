@@ -29,7 +29,8 @@ sub execute {
         $c->request->data($rdata);
     } else {
         $c->log->debug(
-            'I would have deserialized, but there was nothing in the body!');
+            'I would have deserialized, but there was nothing in the body!')
+            if $c->debug;
     }
     return 1;
 }

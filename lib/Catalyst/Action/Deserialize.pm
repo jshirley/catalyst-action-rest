@@ -52,14 +52,12 @@ Catalyst::Action::Deserialize - Deserialize Data in a Request
     package Foo::Controller::Bar;
 
     __PACKAGE__->config(
-        serialize => {
-            'default'   => 'text/x-yaml',
-            'stash_key' => 'rest',
-            'map'       => {
-                'text/x-yaml'        => 'YAML',
-                'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
-            },
-        }
+        'default'   => 'text/x-yaml',
+        'stash_key' => 'rest',
+        'map'       => {
+            'text/x-yaml'        => 'YAML',
+            'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
+        },
     );
 
     sub begin :ActionClass('Deserialize') {}
@@ -70,9 +68,6 @@ This action will deserialize HTTP POST, PUT, and OPTIONS requests.
 It assumes that the body of the HTTP Request is a serialized object.
 The serializer is selected by introspecting the requests content-type
 header.
-
-It requires that your Catalyst controller have a "serialize" entry
-in it's configuration.  See L<Catalyst::Action::Serialize> for the details.
 
 The specifics of deserializing each content-type is implemented as
 a plugin to L<Catalyst::Action::Deserialize>.  You can see a list

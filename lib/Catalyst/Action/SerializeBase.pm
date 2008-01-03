@@ -43,13 +43,23 @@ sub _load_content_plugins {
     # we'll use it.
     my $sclass = $search_path . "::";
     my $sarg;
-    my $map = $controller->config->{'serialize'}->{'map'};
+    my $map;
 
+    my $config;
+    
+    if ( exists $controller->config->{'serialize'} ) {
+        $c->log->info("Using deprecated configuration for Catalyst::Action::REST!");
+        $c->log->info("Please see perldoc Catalyst::Action::REST for the update guide");
+        $config = $controller->config->{'serialize'};
+    } else {
+        $config = $controller->config;
+    }
+    $map = $config->{'map'};
     # If we don't have a handler for our preferred content type, try
     # the default
     if ( ! exists $map->{$content_type} ) {
-        if( exists $controller->config->{'serialize'}->{'default'} ) {
-            $content_type = $controller->config->{'serialize'}->{'default'} ;
+        if( exists $config->{'default'} ) {
+            $content_type = $config->{'default'} ;
         } else {
             return $self->_unsupported_media_type($c, $content_type);
         }

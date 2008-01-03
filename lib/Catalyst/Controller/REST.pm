@@ -175,7 +175,7 @@ response if an attempt to use an unsupported content-type is made.  You
 can ensure that something is always returned by setting the C<default>
 config option:
 
-   __PACKAGE__->config->{'serialize'}->{'default'} = 'text/x-yaml';
+   __PACKAGE__->config->{'default'} = 'text/x-yaml';
 
 Would make it always fall back to the serializer plugin defined for text/x-yaml.
 
@@ -213,7 +213,6 @@ use Params::Validate qw(:all);
 __PACKAGE__->mk_accessors(qw(serialize));
 
 __PACKAGE__->config(
-    serialize => {
         'stash_key' => 'rest',
         'map'       => {
             'text/html'          => 'YAML::HTML',
@@ -228,7 +227,6 @@ __PACKAGE__->config(
             'text/x-config-general' => [ 'Data::Serializer', 'Config::General' ],
             'text/x-php-serialization' => [ 'Data::Serializer', 'PHP::Serialization' ],
         },
-    }
 );
 
 sub begin : ActionClass('Deserialize') {
@@ -351,7 +349,7 @@ sub status_bad_request {
     my %p    = validate( @_, { message => { type => SCALAR }, }, );
 
     $c->response->status(400);
-    $c->log->debug( "Status Bad Request: " . $p{'message'} );
+    $c->log->debug( "Status Bad Request: " . $p{'message'} ) if $c->debug;
     $self->_set_entity( $c, { error => $p{'message'} } );
     return 1;
 }
@@ -377,7 +375,7 @@ sub status_not_found {
     my %p    = validate( @_, { message => { type => SCALAR }, }, );
 
     $c->response->status(404);
-    $c->log->debug( "Status Not Found: " . $p{'message'} );
+    $c->log->debug( "Status Not Found: " . $p{'message'} ) if $c->debug;
     $self->_set_entity( $c, { error => $p{'message'} } );
     return 1;
 }
@@ -387,7 +385,7 @@ sub _set_entity {
     my $c      = shift;
     my $entity = shift;
     if ( defined($entity) ) {
-        $c->stash->{ $self->config->{'serialize'}->{'stash_key'} } = $entity;
+        $c->stash->{ $self->{'stash_key'} } = $entity;
     }
     return 1;
 }

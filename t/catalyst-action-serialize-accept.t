@@ -14,7 +14,7 @@ use Catalyst;
 __PACKAGE__->config(
     name => 'Test::Catalyst::Action::Serialize',
     serialize => {
-	'default'   => 'text/x-yaml',
+        'default'   => 'text/x-yaml',
         'stash_key' => 'rest',
         'map'       => {
             'text/x-yaml'        => 'YAML',

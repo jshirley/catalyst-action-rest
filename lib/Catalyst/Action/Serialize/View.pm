@@ -7,8 +7,12 @@ use base 'Catalyst::Action';
 sub execute {
     my $self = shift;
     my ( $controller, $c, $view ) = @_;
-    my $stash_key = $controller->config->{'serialize'}->{'stash_key'}
-      || 'rest';
+
+    my $stash_key = (
+            $controller->config->{'serialize'} ?
+                $controller->config->{'serialize'}->{'stash_key'} :
+                $controller->config->{'stash_key'} 
+        ) || 'rest';
 
     if ( !$c->view($view) ) {
         $c->log->error("Could not load $view, refusing to serialize");

@@ -18,22 +18,24 @@ sub execute {
     my ( $controller, $c, $test ) = @_;
 
     my $body = $c->request->body;
+    my $rbody;
+
     if ($body) {
-        my $rdata;
-        my $rbody;
         while (my $line = <$body>) {
             $rbody .= $line;
         }
-        eval {
-            $rdata = JSON::Syck::Load( $rbody );
-        };
+    }
+
+    if ( $rbody ) {
+        my $rdata = eval { JSON::Syck::Load( $rbody ); };
         if ($@) {
             return $@;
         }
         $c->request->data($rdata);
     } else {
         $c->log->debug(
-            'I would have deserialized, but there was nothing in the body!');
+            'I would have deserialized, but there was nothing in the body!')
+            if $c->debug;
     }
     return 1;
 }

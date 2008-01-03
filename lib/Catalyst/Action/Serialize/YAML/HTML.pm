@@ -18,7 +18,11 @@ sub execute {
     my $self = shift;
     my ( $controller, $c ) = @_;
 
-    my $stash_key = $controller->config->{'serialize'}->{'stash_key'} || 'rest';
+    my $stash_key = (
+            $controller->config->{'serialize'} ?
+                $controller->config->{'serialize'}->{'stash_key'} :
+                $controller->config->{'stash_key'} 
+        ) || 'rest';
     my $app = $c->config->{'name'} || '';
     my $output = "<html>";
     $output .= "<title>" . $app . "</title>";

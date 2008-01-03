@@ -29,15 +29,15 @@ sub execute {
         $controller, $c );
     unless ( defined($sclass) ) {
         if ( defined($content_type) ) {
-            $c->log->debug("Could not find a serializer for $content_type");
+            $c->log->info("Could not find a serializer for $content_type");
         } else {
-            $c->log->debug(
+            $c->log->info(
                 "Could not find a serializer for an empty content type");
         }
         return 1;
     }
     $c->log->debug(
-        "Serializing with $sclass" . ( $sarg ? " [$sarg]" : '' ) );
+        "Serializing with $sclass" . ( $sarg ? " [$sarg]" : '' ) ) if $c->debug;
 
     my $rc;
     if ( defined($sarg) ) {
@@ -65,14 +65,12 @@ Catalyst::Action::Serialize - Serialize Data in a Response
     package Foo::Controller::Bar;
 
     __PACKAGE__->config(
-        serialize => {
-            'default'   => 'text/x-yaml',
-            'stash_key' => 'rest',
-            'map'       => {
-                'text/html'          => [ 'View', 'TT', ],
-                'text/x-yaml'        => 'YAML',
-                'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
-            },
+        'default'   => 'text/x-yaml',
+        'stash_key' => 'rest',
+        'map'       => {
+            'text/html'          => [ 'View', 'TT', ],
+            'text/x-yaml'        => 'YAML',
+            'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
         }
     );
 
@@ -83,12 +81,11 @@ Catalyst::Action::Serialize - Serialize Data in a Response
 This action will serialize the body of an HTTP Response.  The serializer is
 selected by introspecting the HTTP Requests content-type header.
 
-It requires that your Catalyst controller have a "serialize" entry
-in it's configuration, which sets up the mapping between Content Type's
-and Serialization classes.
+It requires that your Catalyst controller is properly configured to set up the
+mapping between Content Type's and Serialization classes.
 
-The specifics of serializing each content-type is implemented as
-a plugin to L<Catalyst::Action::Serialize>.
+The specifics of serializing each content-type is implemented as a plugin to
+L<Catalyst::Action::Serialize>.
 
 Typically, you would use this ActionClass on your C<end> method.  However,
 nothing is stopping you from choosing specific methods to Serialize:
