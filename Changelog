@@ -1,3 +1,13 @@
+Thu Jan  3 08:54:09 PST 2008
+	Fixed an issue where YAML::Syck versions 0.92 require $c->request->body to
+	be stringified
+
+Fri Dec 21 15:23:46 EDT 2007
+	Updated the configuration specifiers to operate more in line with the way
+	Catalyst expects.  Most notably component based configuration through
+	"Controller::RestClass" now works.  "serialize" at the top level simply
+	is suggested defaults that all REST classes inherit.
+
 Wed Jul 04 11:17:20 EDT 2007
 	Fixed 'default' serializer to set a valid Content-Type: header.  Fixes
 	RT ticket 27949.  Note that behavior has changed -- the default
