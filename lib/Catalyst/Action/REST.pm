@@ -12,6 +12,7 @@ use warnings;
 
 use base 'Catalyst::Action';
 use Class::Inspector;
+use Catalyst;
 use Catalyst::Request::REST;
 use 5.8.1;
 

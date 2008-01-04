@@ -1,6 +1,13 @@
+Thu Jan  3 19:42:16 EST 2008
+	Fixed RT#30498 - REST controller references Catalyst without
+	  loading it first.
+	Fixed RT#32042 - Import of Params::Validate :all plays badly
+	  with subclasses that have their own validate()
+	Fixed RT#30456 - Debug messages print even with debugging disabled
+
 Thu Jan  3 08:54:09 PST 2008
 	Fixed an issue where YAML::Syck versions 0.92 require $c->request->body to
-	be stringified
+	  be stringified
 
 Fri Dec 21 15:23:46 EDT 2007
 	Updated the configuration specifiers to operate more in line with the way

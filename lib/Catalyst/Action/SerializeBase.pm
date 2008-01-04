@@ -36,7 +36,7 @@ sub _load_content_plugins {
         $self->_serialize_plugins( \@plugins );
     }
 
-    my $content_type = $c->request->preferred_content_type;
+    my $content_type = $c->request->preferred_content_type || '';
 
     # Finally, we load the class.  If you have a default serializer,
     # and we still don't have a content-type that exists in the map,
@@ -94,8 +94,7 @@ sub _load_content_plugins {
         eval { require $load_class; };
         if ($@) {
             $c->log->error(
-                "Error loading $sclass for " . $content_type . ": $!" )
-              if $c->log->is_debug;
+                "Error loading $sclass for " . $content_type . ": $!" );
             return $self->_unsupported_media_type($c, $content_type);
         } else {
             $self->_loaded_plugins->{$sclass} = 1;

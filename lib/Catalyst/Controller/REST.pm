@@ -208,7 +208,7 @@ such require you pass the current context ($c) as the first argument.
 use strict;
 use warnings;
 use base 'Catalyst::Controller';
-use Params::Validate qw(:all);
+use Params::Validate qw(SCALAR OBJECT);
 
 __PACKAGE__->mk_accessors(qw(serialize));
 
@@ -253,7 +253,7 @@ Example:
 sub status_ok {
     my $self = shift;
     my $c    = shift;
-    my %p    = validate( @_, { entity => 1, }, );
+    my %p    = Params::Validate::validate( @_, { entity => 1, }, );
 
     $c->response->status(200);
     $self->_set_entity( $c, $p{'entity'} );
@@ -283,7 +283,7 @@ This is probably what you want for most PUT requests.
 sub status_created {
     my $self = shift;
     my $c    = shift;
-    my %p    = validate(
+    my %p    = Params::Validate::validate(
         @_,
         {
             location => { type     => SCALAR | OBJECT },
@@ -321,7 +321,7 @@ Example:
 sub status_accepted {
     my $self = shift;
     my $c    = shift;
-    my %p    = validate( @_, { entity => 1, }, );
+    my %p    = Params::Validate::validate( @_, { entity => 1, }, );
 
     $c->response->status(202);
     $self->_set_entity( $c, $p{'entity'} );
@@ -346,7 +346,7 @@ Example:
 sub status_bad_request {
     my $self = shift;
     my $c    = shift;
-    my %p    = validate( @_, { message => { type => SCALAR }, }, );
+    my %p    = Params::Validate::validate( @_, { message => { type => SCALAR }, }, );
 
     $c->response->status(400);
     $c->log->debug( "Status Bad Request: " . $p{'message'} ) if $c->debug;
@@ -372,7 +372,7 @@ Example:
 sub status_not_found {
     my $self = shift;
     my $c    = shift;
-    my %p    = validate( @_, { message => { type => SCALAR }, }, );
+    my %p    = Params::Validate::validate( @_, { message => { type => SCALAR }, }, );
 
     $c->response->status(404);
     $c->log->debug( "Status Not Found: " . $p{'message'} ) if $c->debug;

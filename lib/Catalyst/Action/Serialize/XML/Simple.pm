@@ -20,7 +20,8 @@ sub execute {
         require XML::Simple
     };
     if ($@) {
-        $c->log->debug("Could not load XML::Serializer, refusing to serialize: $@");
+        $c->log->debug("Could not load XML::Serializer, refusing to serialize: $@")
+            if $c->debug;
         return 0;
     }
     my $xs = XML::Simple->new(ForceArray => 0,);
