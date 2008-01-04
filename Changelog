@@ -1,4 +1,8 @@
-Thu Jan  3 19:42:16 EST 2008
+Thu Jan  3 17:23:58 PST 2008 (adam) - Release 0.60
+  Updated my contact information.
+  Prepped for release.
+
+Thu Jan  3 19:42:16 EST 2008 
 	Fixed RT#30498 - REST controller references Catalyst without
 	  loading it first.
 	Fixed RT#32042 - Import of Params::Validate :all plays badly
@@ -9,7 +13,7 @@ Thu Jan  3 08:54:09 PST 2008
 	Fixed an issue where YAML::Syck versions 0.92 require $c->request->body to
 	  be stringified
 
-Fri Dec 21 15:23:46 EDT 2007
+Fri Dec 21 15:23:46 EDT 2007 
 	Updated the configuration specifiers to operate more in line with the way
 	Catalyst expects.  Most notably component based configuration through
 	"Controller::RestClass" now works.  "serialize" at the top level simply
