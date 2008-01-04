@@ -1,6 +1,6 @@
 #
 # Catlyst::Action::Serialize.pm
-# Created by: Adam Jacob, Marchex, <adam@marchex.com>
+# Created by: Adam Jacob, Marchex, <adam@hjksolutions.com>
 #
 # $Id$
 
