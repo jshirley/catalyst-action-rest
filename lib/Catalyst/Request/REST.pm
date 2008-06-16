@@ -20,7 +20,7 @@ Catalyst::Request::REST - A REST-y subclass of Catalyst::Request
 
 =head1 SYNOPSIS
 
-     if ( $c->request->accepts('text/x-json') ) {
+     if ( $c->request->accepts('application/json') ) {
          ...
      }
 

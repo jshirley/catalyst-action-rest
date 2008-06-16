@@ -38,6 +38,12 @@ sub _load_content_plugins {
 
     my $content_type = $c->request->preferred_content_type || '';
 
+    # carp about old text/x-json
+    if ($content_type eq 'text/x-json') {
+        $c->log->info('Using deprecated text/x-json content-type.');
+        $c->log->info('Use application/json instead!');
+    }
+
     # Finally, we load the class.  If you have a default serializer,
     # and we still don't have a content-type that exists in the map,
     # we'll use it.

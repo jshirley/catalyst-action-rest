@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 24;
 use FindBin;
 use lib ( "$FindBin::Bin/../lib" );
 
@@ -112,6 +112,31 @@ use HTTP::Headers;
     $request->headers( HTTP::Headers->new );
     $request->parameters( {} );
     $request->method('GET');
+    $request->content_type('application/json');
+    $request->headers->header(
+        'Accept' =>
+        # From Firefox 2.0 when it requests an html page
+        'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
+    );
+
+    is_deeply( $request->accepted_content_types,
+               [ qw( application/json
+                     text/xml application/xml application/xhtml+xml
+                     image/png
+                     text/html
+                     text/plain
+                     */*
+                   ) ],
+               'accept header is parsed properly, and content-type header has precedence over accept' );
+    ok( ! $request->accept_only, 'accept_only is false' );
+}
+
+{
+    my $request = Catalyst::Request::REST->new;
+    $request->{_context} = 'MockContext';
+    $request->headers( HTTP::Headers->new );
+    $request->parameters( {} );
+    $request->method('GET');
     $request->content_type('text/x-json');
     $request->headers->header(
         'Accept' => 'text/plain,text/x-json',
@@ -124,6 +149,23 @@ use HTTP::Headers;
                'each type appears only once' );
 }
 
+{
+    my $request = Catalyst::Request::REST->new;
+    $request->{_context} = 'MockContext';
+    $request->headers( HTTP::Headers->new );
+    $request->parameters( {} );
+    $request->method('GET');
+    $request->content_type('application/json');
+    $request->headers->header(
+        'Accept' => 'text/plain,application/json',
+    );
+
+    is_deeply( $request->accepted_content_types,
+               [ qw( application/json
+                     text/plain
+                   ) ],
+               'each type appears only once' );
+}
 
 package MockContext;
 

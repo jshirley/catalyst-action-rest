@@ -12,6 +12,7 @@ __PACKAGE__->config(
         'text/html'          => 'YAML::HTML',
         'text/xml'           => 'XML::Simple',
         'text/x-yaml'        => 'YAML',
+        'application/json'   => 'JSON',
         'text/x-json'        => 'JSON',
         'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
         'text/x-data-denter' => [ 'Data::Serializer', 'Data::Denter' ],
