@@ -18,6 +18,7 @@ __PACKAGE__->config(
         'stash_key' => 'rest',
         'map'       => {
             'text/x-yaml'        => 'YAML',
+            'application/json'        => 'JSON',
             'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
             'text/broken'        => 'Broken',
         },
@@ -44,10 +45,11 @@ package main;
 
 use strict;
 use warnings;
-use Test::More tests => 7;
+use Test::More tests => 10;
 use Data::Serializer;
 use FindBin;
 use Data::Dump qw(dump);
+use JSON::Syck; 
 
 use lib ("$FindBin::Bin/lib", "$FindBin::Bin/../lib", "$FindBin::Bin/broken");
 use Test::Rest;
@@ -70,6 +72,17 @@ EOH
 	ok( $res->is_success, 'GET the serialized request succeeded' );
 	is( $res->content, $data, "Request returned proper data");
 	is( $res->header('Content-type'), 'text/x-yaml', '... with expected content-type')
+}
+
+{
+        my $at = Test::Rest->new('content_type' => 'text/doesnt-exist');               
+	my $req = $at->get(url => '/test');
+	$req->header('Accept', 'application/json');
+	my $res = request($req);
+	ok( $res->is_success, 'GET the serialized request succeeded' );
+        my $ret = JSON::Syck::Load($res->content);
+	is( $ret->{lou}, 'is my cat', "Request returned proper data");
+	is( $res->header('Content-type'), 'application/json', 'Accept header used if content-type mapping not found')
 }
 
 # Make sure we don't get a bogus content-type when using default

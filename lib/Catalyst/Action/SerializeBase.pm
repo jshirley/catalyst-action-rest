@@ -36,14 +36,6 @@ sub _load_content_plugins {
         $self->_serialize_plugins( \@plugins );
     }
 
-    my $content_type = $c->request->preferred_content_type || '';
-
-    # carp about old text/x-json
-    if ($content_type eq 'text/x-json') {
-        $c->log->info('Using deprecated text/x-json content-type.');
-        $c->log->info('Use application/json instead!');
-    }
-
     # Finally, we load the class.  If you have a default serializer,
     # and we still don't have a content-type that exists in the map,
     # we'll use it.
@@ -63,12 +55,21 @@ sub _load_content_plugins {
     $map = $config->{'map'};
     # If we don't have a handler for our preferred content type, try
     # the default
-    if ( ! exists $map->{$content_type} ) {
+
+    my ($content_type) = grep { $map->{$_} } @{$c->request->accepted_content_types};
+
+    unless ( defined $content_type ) {
         if( exists $config->{'default'} ) {
             $content_type = $config->{'default'} ;
         } else {
             return $self->_unsupported_media_type($c, $content_type);
         }
+    }
+
+    # carp about old text/x-json
+    if ($content_type eq 'text/x-json') {
+        $c->log->info('Using deprecated text/x-json content-type.');
+        $c->log->info('Use application/json instead!');
     }
 
     if ( exists( $map->{$content_type} ) ) {
