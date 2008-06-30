@@ -1,4 +1,7 @@
+
+Mon Jun 30 12:28:00 PST 2008 (jshirley) - Release 0.61
   Support official application/json and carp about text/x-json
+  Accepted patch from Luke Saunders for processing all accepted content types
 
 Thu Jan  3 17:23:58 PST 2008 (adam) - Release 0.60
   Updated my contact information.

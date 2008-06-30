@@ -1,5 +1,7 @@
 package Catalyst::Controller::REST;
 
+our $VERSION = 0.61;
+
 =head1 NAME
 
 Catalyst::Controller::REST - A RESTful controller 
