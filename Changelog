@@ -1,3 +1,7 @@
+Wed Jul 02 07:53:00 PST 2008 (jshirley) - Release 0.62
+  Reshipping with current Module::Install included due to error reports
+    about failed installs
+
 
 Mon Jun 30 12:28:00 PST 2008 (jshirley) - Release 0.61
   Support official application/json and carp about text/x-json
