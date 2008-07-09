@@ -11,7 +11,7 @@ use strict;
 use warnings;
 
 use base 'Catalyst::Action';
-use JSON::Syck;
+use JSON qw(encode_json);
 
 sub execute {
     my $self = shift;
@@ -24,7 +24,7 @@ sub execute {
         ) || 'rest';
     my $output;
     eval {
-        $output = JSON::Syck::Dump($c->stash->{$stash_key});
+        $output = encode_json( $c->stash->{$stash_key} );
     };
     if ($@) {
         return $@;

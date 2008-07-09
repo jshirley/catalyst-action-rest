@@ -1,3 +1,7 @@
+Wed Jul 09 11:16:00 PST 2008 (jshirley) - Release 0.63
+  Changing from JSON::Syck to JSON/JSON::XS
+  Refactored tests to be more applicable to current state of affairs
+
 Wed Jul 02 07:53:00 PST 2008 (jshirley) - Release 0.62
   Reshipping with current Module::Install included due to error reports
     about failed installs

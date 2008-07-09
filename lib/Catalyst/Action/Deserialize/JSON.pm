@@ -11,7 +11,7 @@ use strict;
 use warnings;
 
 use base 'Catalyst::Action';
-use JSON::Syck;
+use JSON qw( decode_json );
 
 sub execute {
     my $self = shift;
@@ -27,7 +27,7 @@ sub execute {
     }
 
     if ( $rbody ) {
-        my $rdata = eval { JSON::Syck::Load( $rbody ); };
+        my $rdata = eval { decode_json( $rbody ) };
         if ($@) {
             return $@;
         }

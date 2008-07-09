@@ -14,10 +14,12 @@ use base 'Catalyst::Action';
 use Class::Inspector;
 use Catalyst;
 use Catalyst::Request::REST;
+use Catalyst::Controller::REST;
+
 use 5.8.1;
 
 our
-   $VERSION = '0.62';
+   $VERSION = $Catalyst::Controller::REST::VERSION;
 
 # This is wrong in several ways. First, there's no guarantee that
 # Catalyst.pm has not been subclassed. Two, there's no guarantee that
