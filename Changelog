@@ -1,3 +1,6 @@
+Wed Aug 13 08:55:00 PST 2008 (jshirley) - Release 0.64
+  New dist to fix issue with Module::Install
+
 Wed Jul 09 11:16:00 PST 2008 (jshirley) - Release 0.63
   Changing from JSON::Syck to JSON/JSON::XS
   Refactored tests to be more applicable to current state of affairs
