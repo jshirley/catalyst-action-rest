@@ -16,7 +16,7 @@ use Catalyst;
 use Catalyst::Request::REST;
 use Catalyst::Controller::REST;
 
-use 5.8.1;
+BEGIN { require 5.008001; }
 
 our $VERSION = '0.64';
 
