@@ -87,7 +87,7 @@ use HTTP::Headers;
     $request->headers( HTTP::Headers->new );
     $request->parameters( {} );
     $request->method('GET');
-    $request->content_type('text/x-json');
+    $request->content_type('application/json');
     $request->headers->header(
         'Accept' =>
         # From Firefox 2.0 when it requests an html page
@@ -95,7 +95,7 @@ use HTTP::Headers;
     );
 
     is_deeply( $request->accepted_content_types,
-               [ qw( text/x-json
+               [ qw( application/json
                      text/xml application/xml application/xhtml+xml
                      image/png
                      text/html

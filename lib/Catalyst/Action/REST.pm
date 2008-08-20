@@ -18,7 +18,7 @@ use Catalyst::Controller::REST;
 
 BEGIN { require 5.008001; }
 
-our $VERSION = '0.64';
+our $VERSION = '0.65';
 
 # This is wrong in several ways. First, there's no guarantee that
 # Catalyst.pm has not been subclassed. Two, there's no guarantee that
@@ -155,15 +155,25 @@ a sensible set of defaults for a controller doing REST.
 
 L<Catalyst::Action::Serialize>, L<Catalyst::Action::Deserialize>
 
+=head1 MAINTAINER
+
+J. Shirley <jshirley@gmail.com>
+
+=head1 CONTRIBUTORS
+
+Christopher Laco
+
+Luke Saunders
+
+John Goulah
+
+Daisuke Maki <daisuke@endeworks.jp>
+
 =head1 AUTHOR
 
 Adam Jacob <adam@stalecoffee.org>, with lots of help from mst and jrockway
 
 Marchex, Inc. paid me while I developed this module.  (http://www.marchex.com)
-
-=head1 CONTRIBUTERS
-
-Daisuke Maki <daisuke@endeworks.jp>
 
 =head1 LICENSE
 

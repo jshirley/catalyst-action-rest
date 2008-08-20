@@ -17,8 +17,8 @@ requires('Data::Dump'                => undef);
 
 feature 'JSON (application/json) support',
     -default   => 0,
-    'JSON'     => undef;
-    'JSON::XS' => undef;
+    'JSON'     => '2.12';
+    'JSON::XS' => '2.2222';
 
 feature 'Data::Denter (text/x-data-denter) support',
     -default => 0,
