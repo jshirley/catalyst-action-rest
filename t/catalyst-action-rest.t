@@ -81,6 +81,15 @@ sub not_implemented_not_implemented {
     $c->forward('ok');
 }
 
+sub not_modified : Local : ActionClass('REST') { }
+
+sub not_modified_GET {
+    my ( $self, $c ) = @_;
+    $c->res->status(304);
+    return 1;
+}
+
+
 sub ok : Private {
     my ( $self, $c ) = @_;
 
@@ -134,6 +143,9 @@ my $options_res = request( $t->options( url => '/notreally' ) );
 is( $options_res->code, 200, "OPTIONS request handler succeeded" );
 is( $options_res->header('allow'),
     "GET", "OPTIONS request allow header properly set." );
+
+my $modified_res = request( $t->get( url => '/not_modified' ) );
+is( $modified_res->code, 304, "Not Modified request handler succeeded" );
 
 my $ni_res = request( $t->delete( url => '/not_implemented' ) );
 is( $ni_res->code, 200, "Custom not_implemented handler succeeded" );

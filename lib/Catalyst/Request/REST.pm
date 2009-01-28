@@ -10,7 +10,7 @@ package Catalyst::Request::REST;
 use strict;
 use warnings;
 
-use base 'Catalyst::Request';
+use base qw/Catalyst::Request Class::Accessor::Fast/;
 use HTTP::Headers::Util qw(split_header_words);
 
 
@@ -35,14 +35,14 @@ methods are all related to the content types accepted by the client.
 
 =head1 METHODS
 
-=over 4 data
-
 If the request went through the Deserializer action, this method will
 returned the deserialized data structure.
 
 =cut
 
 __PACKAGE__->mk_accessors(qw(data accept_only));
+
+=over 4 
 
 =item accepted_content_types
 
@@ -141,9 +141,15 @@ sub accepts {
     return grep { $_ eq $type } @{ $self->accepted_content_types };
 }
 
+=back
+
 =head1 AUTHOR
 
 Adam Jacob <adam@stalecoffee.org>, with lots of help from mst and jrockway
+
+=head1 MAINTAINER
+
+J. Shirley <jshirley@cpan.org>
 
 =head1 LICENSE
 
