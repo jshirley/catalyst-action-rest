@@ -107,7 +107,7 @@ installed.
 
 In addition, each serializer has it's quirks in terms of what sorts of data
 structures it will properly handle.  L<Catalyst::Controller::REST> makes
-no attempt to svae you from yourself in this regard. :) 
+no attempt to save you from yourself in this regard. :) 
 
 =over 2
 
