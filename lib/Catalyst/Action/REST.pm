@@ -155,6 +155,23 @@ a sensible set of defaults for a controller doing REST.
 
 L<Catalyst::Action::Serialize>, L<Catalyst::Action::Deserialize>
 
+=head1 TROUBLESHOOTING
+
+=over 4
+
+=item Q: I'm getting a "415 Unsupported Media Type" error. What gives?!
+
+A:  Most likely, you haven't set Content-type equal to "application/json", or one of the 
+accepted return formats.  You can do this by setting it in your query string thusly:
+?content-type=application%2Fjson (where %2F == / uri escaped).
+
+=cut
+
+=cut
+
+
+
+
 =head1 MAINTAINER
 
 J. Shirley <jshirley@gmail.com>
