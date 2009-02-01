@@ -163,7 +163,10 @@ L<Catalyst::Action::Serialize>, L<Catalyst::Action::Deserialize>
 
 A:  Most likely, you haven't set Content-type equal to "application/json", or one of the 
 accepted return formats.  You can do this by setting it in your query string thusly:
-?content-type=application%2Fjson (where %2F == / uri escaped). **NOTE** Apache will refuse %2F unless configured otherise.
+?content-type=application%2Fjson (where %2F == / uri escaped). 
+
+**NOTE** Apache will refuse %2F unless configured otherise.
+Make sure AllowEncodedSlashes On is in your httpd.conf file in order for this to run smoothly.
 
 =cut
 
