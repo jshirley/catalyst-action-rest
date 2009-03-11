@@ -99,27 +99,30 @@ L<Catalyst::Request::REST>.
 
 =head1 CONFIGURATION
 
-=over 4
+=head2 map
 
-=item default
+Takes a hashref, mapping Content-Types to a given serializer plugin.
 
-The Content-Type of the default Serialization format.  This must be a
-Content-Type associated with a plugin in the "map" section below.  
+=head2 default
 
-This is used if a requested content-type is not recognized.
+This is the 'fall-back' Content-Type if none of the requested or acceptable
+types is found in the L</map>. It must be an entry in the L</map>.
 
-=item stash_key 
+=head2 stash_key 
 
-We will serialize the data that lives in this location in the stash.  So
-if the value is "rest", we will serialize the data under:
+Specifies the key of the stash entry holding the data that is to be serialized.
+So if the value is "rest", we will serialize the data under:
 
   $c->stash->{'rest'}
 
-=item map
+=head2 content_type_stash_key
 
-Takes a hashref, mapping Content-Types to a given plugin.
+Specifies the key of the stash entry that optionally holds an overriding
+Content-Type. If set, and if the specified stash entry has a valid value,
+then it takes priority over the requested content types.
 
-=back
+This can be useful if you want to dynamically force a particular content type,
+perhaps for debugging.
 
 =head1 HELPFUL PEOPLE
 

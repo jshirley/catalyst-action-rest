@@ -16,6 +16,7 @@ __PACKAGE__->config(
     serialize => {
         'default'   => 'text/x-yaml',
         'stash_key' => 'rest',
+        'content_type_stash_key' => 'serialize_content_type',
         'map'       => {
             'text/x-yaml'        => 'YAML',
             'application/json'   => 'JSON',
@@ -36,16 +37,18 @@ sub test :Local :ActionClass('Serialize') {
 
 sub test_second :Local :ActionClass('Serialize') {
     my ( $self, $c ) = @_;
+    $c->stash->{'serialize_content_type'} = $c->req->params->{'serialize_content_type'};
     $c->stash->{'rest'} = {
         lou => 'is my cat',
     };
 }
 
+
 package main;
 
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 16;
 use Data::Serializer;
 use FindBin;
 use Data::Dump qw(dump);
@@ -105,6 +108,28 @@ SKIP: {
 	ok( $res->is_success, 'GET the serialized request succeeded' );
 	is( $res->content, $data, "Request returned proper data");
 	is( $res->header('Content-type'), 'text/x-yaml', '... with expected content-type')
+}
+
+# Make that using content_type_stash_key, an invalid value in the stash gets ignored
+{
+	my $req = $t->get(url => '/test_second?serialize_content_type=nonesuch');
+	$req->remove_header('Content-Type');
+	$req->header('Accept', '*/*');
+	my $res = request($req);
+	ok( $res->is_success, 'GET the serialized request succeeded' );
+	is( $res->content, $data, "Request returned proper data");
+	is( $res->header('Content-type'), 'text/x-yaml', '... with expected content-type')
+}
+
+# Make that using content_type_stash_key, a valid value in the stash gets priority
+{
+	my $req = $t->get(url => '/test_second?serialize_content_type=text/x-data-dumper');
+	$req->remove_header('Content-Type');
+	$req->header('Accept', '*/*');
+	my $res = request($req);
+	ok( $res->is_success, 'GET the serialized request succeeded' );
+	is( $res->content, "{'lou' => 'is my cat'}", "Request returned proper data");
+	is( $res->header('Content-type'), 'text/x-data-dumper', '... with expected content-type')
 }
 
 1;
