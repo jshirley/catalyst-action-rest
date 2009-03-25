@@ -5,7 +5,7 @@ perl_version '5.8.1';
 name 'Catalyst-Action-REST';
 all_from 'lib/Catalyst/Action/REST.pm';
 
-requires('Catalyst'                  => '5.7001');
+requires('Catalyst::Runtime'         => '5.7001');
 requires('Params::Validate'          => '0.76');
 requires('YAML::Syck'                => '0.67');
 requires('Module::Pluggable::Object' => undef);
