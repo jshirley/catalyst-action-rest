@@ -1,7 +1,6 @@
-package Test::Catalyst::Action::Deserialize::Controller::Root;
+package Test::Catalyst::Action::REST::Controller::Deserialize;
 
 use base 'Catalyst::Controller';
-__PACKAGE__->config->{namespace} = '';
 
 __PACKAGE__->config(
     'stash_key' => 'rest',
