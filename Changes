@@ -1,7 +1,7 @@
-??? ??? ?? ??:??:?? ??? ???? (???) - Release 0.67
-  Fix RT#43840, improper app-level config handling - hdp
-  Fix RT#42859, 'wrong' Catalyst dependency - hdp
-  Fix RT#42025, stepping on custom request classes - hdp
+Wed Mar 25 09:36:00 PDT 2009 (hdp - Release 0.67_01
+  Fix RT#43840, improper app-level config handling
+  Fix RT#42859, 'wrong' Catalyst dependency
+  Fix RT#42025, stepping on custom request classes
 
 Wed Aug 20 10:42:00 PST 2008 (jshirley) - Release 0.65
   Fully revamped tests to work without any JSON support

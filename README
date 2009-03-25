@@ -2,7 +2,7 @@ NAME
     Catalyst::Controller::REST - A RESTful controller
 
 VERSION
-    0.67
+    0.67_01
 
 SYNOPSIS
         package Foo::Controller::Bar;
