@@ -1,39 +1,3 @@
-package Test::Catalyst::Action::Serialize;
-
-use FindBin;
-
-use lib ("$FindBin::Bin/../lib");
-
-use strict;
-use warnings;
-
-use Catalyst::Runtime '5.70';
-
-use Catalyst;
-
-__PACKAGE__->config(
-    name => 'Test::Catalyst::Action::Serialize',
-    serialize => {
-        'stash_key' => 'rest',
-        'map'       => {
-            'text/x-yaml'        => 'YAML',
-            'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
-            'text/broken'        => 'Broken',
-        },
-    }
-);
-
-__PACKAGE__->setup;
-
-sub test :Local :ActionClass('Serialize') {
-    my ( $self, $c ) = @_;
-    $c->stash->{'rest'} = {
-        lou => 'is my cat',
-    };
-}
-
-package main;
-
 use strict;
 use warnings;
 use Test::More tests => 3; 
@@ -46,9 +10,9 @@ use Test::Rest;
 # YAML 
 my $t = Test::Rest->new('content_type' => 'text/x-yaml');
 
-use_ok 'Catalyst::Test', 'Test::Catalyst::Action::Serialize';
+use_ok 'Catalyst::Test', 'Test::Catalyst::Action::REST';
 
-my $req = $t->get(url => '/test?content-type=text/x-yaml');
+my $req = $t->get(url => '/serialize/test?content-type=text/x-yaml');
 $req->remove_header('Content-Type');
 my $res = request($req);
 ok( $res->is_success, 'GET the serialized request succeeded' );
