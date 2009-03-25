@@ -1,51 +1,3 @@
-package Test::Catalyst::Action::Serialize;
-
-use FindBin;
-
-use lib ("$FindBin::Bin/../lib");
-
-use strict;
-use warnings;
-
-use Catalyst::Runtime '5.70';
-
-use Catalyst;
-
-__PACKAGE__->config(
-    name => 'Test::Catalyst::Action::Serialize',
-    serialize => {
-        'default'   => 'text/x-yaml',
-        'stash_key' => 'rest',
-        'content_type_stash_key' => 'serialize_content_type',
-        'map'       => {
-            'text/x-yaml'        => 'YAML',
-            'application/json'   => 'JSON',
-            'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
-            'text/broken'        => 'Broken',
-        },
-    }
-);
-
-__PACKAGE__->setup;
-
-sub test :Local :ActionClass('Serialize') {
-    my ( $self, $c ) = @_;
-    $c->stash->{'rest'} = {
-        lou => 'is my cat',
-    };
-}
-
-sub test_second :Local :ActionClass('Serialize') {
-    my ( $self, $c ) = @_;
-    $c->stash->{'serialize_content_type'} = $c->req->params->{'serialize_content_type'};
-    $c->stash->{'rest'} = {
-        lou => 'is my cat',
-    };
-}
-
-
-package main;
-
 use strict;
 use warnings;
 use Test::More tests => 16;
@@ -59,7 +11,7 @@ use Test::Rest;
 # Should use Data::Dumper, via YAML 
 my $t = Test::Rest->new('content_type' => 'text/x-yaml');
 
-use_ok 'Catalyst::Test', 'Test::Catalyst::Action::Serialize';
+use_ok 'Catalyst::Test', 'Test::Catalyst::Action::REST';
 
 my $data = <<EOH;
 --- 
@@ -67,7 +19,7 @@ lou: is my cat
 EOH
 
 {
-	my $req = $t->get(url => '/test');
+	my $req = $t->get(url => '/serialize/test');
 	$req->remove_header('Content-Type');
 	$req->header('Accept', 'text/x-yaml');
 	my $res = request($req);
@@ -89,7 +41,7 @@ SKIP: {
     skip "can't test application/json without JSON support", 3 if $@;
     my $json = JSON->new;
     my $at = Test::Rest->new('content_type' => 'text/doesnt-exist');
-	my $req = $at->get(url => '/test');
+	my $req = $at->get(url => '/serialize/test');
 	$req->header('Accept', 'application/json');
 	my $res = request($req);
     ok( $res->is_success, 'GET the serialized request succeeded' );
@@ -101,7 +53,7 @@ SKIP: {
 # Make sure we don't get a bogus content-type when using default
 # serializer (rt.cpan.org ticket 27949)
 {
-	my $req = $t->get(url => '/test');
+	my $req = $t->get(url => '/serialize/test');
 	$req->remove_header('Content-Type');
 	$req->header('Accept', '*/*');
 	my $res = request($req);
@@ -112,7 +64,7 @@ SKIP: {
 
 # Make that using content_type_stash_key, an invalid value in the stash gets ignored
 {
-	my $req = $t->get(url => '/test_second?serialize_content_type=nonesuch');
+	my $req = $t->get(url => '/serialize/test_second?serialize_content_type=nonesuch');
 	$req->remove_header('Content-Type');
 	$req->header('Accept', '*/*');
 	my $res = request($req);
@@ -123,7 +75,9 @@ SKIP: {
 
 # Make that using content_type_stash_key, a valid value in the stash gets priority
 {
-	my $req = $t->get(url => '/test_second?serialize_content_type=text/x-data-dumper');
+	my $req = $t->get(url =>
+	    '/serialize/test_second?serialize_content_type=text/x-data-dumper'
+	);
 	$req->remove_header('Content-Type');
 	$req->header('Accept', '*/*');
 	my $res = request($req);
