@@ -1,37 +1,3 @@
-package Test::Catalyst::Action::Deserialize;
-
-use FindBin;
-
-use lib ("$FindBin::Bin/../lib", "$FindBin::Bin/lib" );
-
-use strict;
-use warnings;
-
-use Catalyst::Runtime '5.70';
-
-use Catalyst;
-
-__PACKAGE__->config(
-    name => 'Test::Catalyst::Action::Deserialize',
-    serialize => {
-        'stash_key' => 'rest',
-        'map'       => {
-            'text/x-yaml'        => 'YAML',
-            'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
-            'text/broken'        => 'Broken',
-        },
-    }
-);
-
-__PACKAGE__->setup;
-
-sub test :Local :ActionClass('Deserialize') {
-    my ( $self, $c ) = @_;
-    $c->res->output($c->req->data->{'kitty'});
-}
-
-package main;
-
 use strict;
 use warnings;
 use Test::More tests => 5;
