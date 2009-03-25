@@ -17,9 +17,9 @@ sub execute {
     my ( $controller, $c, $serializer ) = @_;
 
     my $stash_key = (
-            $controller->config->{'serialize'} ?
-                $controller->config->{'serialize'}->{'stash_key'} :
-                $controller->config->{'stash_key'} 
+            $controller->{'serialize'} ?
+                $controller->{'serialize'}->{'stash_key'} :
+                $controller->{'stash_key'} 
         ) || 'rest';
     my $sp = $serializer;
     $sp =~ s/::/\//g;

@@ -45,12 +45,12 @@ sub _load_content_plugins {
 
     my $config;
     
-    if ( exists $controller->config->{'serialize'} ) {
+    if ( exists $controller->{'serialize'} ) {
         $c->log->info("Using deprecated configuration for Catalyst::Action::REST!");
         $c->log->info("Please see perldoc Catalyst::Action::REST for the update guide");
-        $config = $controller->config->{'serialize'};
+        $config = $controller->{'serialize'};
     } else {
-        $config = $controller->config;
+        $config = $controller;
     }
     $map = $config->{'map'};
 
