@@ -7,7 +7,6 @@ use base 'Catalyst::Controller';
 __PACKAGE__->config(
     'default'   => 'text/x-yaml',
     'stash_key' => 'rest',
-    'content_type_stash_key' => 'serialize_content_type',
     'map'       => {
         'text/x-yaml'        => 'YAML',
         'application/json'   => 'JSON',
@@ -25,6 +24,7 @@ sub test :Local :ActionClass('Serialize') {
 
 sub test_second :Local :ActionClass('Serialize') {
     my ( $self, $c ) = @_;
+    # 'serialize_content_type' is configured in the test config in t/conf
     $c->stash->{'serialize_content_type'} = $c->req->params->{'serialize_content_type'};
     $c->stash->{'rest'} = {
         lou => 'is my cat',

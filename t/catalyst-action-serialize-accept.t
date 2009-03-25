@@ -74,6 +74,8 @@ SKIP: {
 }
 
 # Make that using content_type_stash_key, a valid value in the stash gets priority
+# this also tests that application-level config is properly passed to
+# individual controllers; see t/lib/Test/Catalyst/Action/REST.pm
 {
 	my $req = $t->get(url =>
 	    '/serialize/test_second?serialize_content_type=text/x-data-dumper'
