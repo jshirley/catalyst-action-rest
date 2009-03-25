@@ -20,11 +20,12 @@ BEGIN { require 5.008001; }
 
 our $VERSION = '0.67';
 
-# This is wrong in several ways. First, there's no guarantee that
-# Catalyst.pm has not been subclassed. Two, there's no guarantee that
-# the user isn't already using their request subclass.
-Catalyst->request_class('Catalyst::Request::REST')
-  unless Catalyst->request_class->isa('Catalyst::Request::REST');
+sub new {
+  my $class  = shift;
+  my $config = shift;
+  Catalyst::Request::REST->_insert_self_into($config->{class});
+  return $class->SUPER::new($config, @_);
+}
 
 =head1 NAME
 

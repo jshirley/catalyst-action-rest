@@ -13,9 +13,16 @@ use base 'Catalyst::Action';
 use Module::Pluggable::Object;
 use Data::Dump qw(dump);
 use Catalyst::Request::REST;
+use Catalyst::Utils ();
 
-Catalyst->request_class('Catalyst::Request::REST')
-    unless Catalyst->request_class->isa('Catalyst::Request::REST');
+sub new {
+  my $class  = shift;
+  my $config = shift;
+  Catalyst::Request::REST->_insert_self_into(
+    Catalyst::Utils::class2appclass($config->{class})
+  );
+  return $class->SUPER::new($config, @_);
+}
 
 __PACKAGE__->mk_accessors(qw(_serialize_plugins _loaded_plugins));
 
