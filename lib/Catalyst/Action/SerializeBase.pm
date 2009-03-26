@@ -18,9 +18,7 @@ use Catalyst::Utils ();
 sub new {
   my $class  = shift;
   my $config = shift;
-  Catalyst::Request::REST->_insert_self_into(
-    Catalyst::Utils::class2appclass($config->{class})
-  );
+  Catalyst::Request::REST->_insert_self_into( $config->{class} );
   return $class->SUPER::new($config, @_);
 }
 

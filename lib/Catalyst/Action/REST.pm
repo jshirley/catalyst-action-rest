@@ -23,7 +23,7 @@ our $VERSION = '0.67_01';
 sub new {
   my $class  = shift;
   my $config = shift;
-  Catalyst::Request::REST->_insert_self_into($config->{class});
+  Catalyst::Request::REST->_insert_self_into( $config->{class} );
   return $class->SUPER::new($config, @_);
 }
 

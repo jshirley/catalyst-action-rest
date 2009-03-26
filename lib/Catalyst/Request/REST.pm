@@ -11,10 +11,14 @@ use strict;
 use warnings;
 
 use base qw/Catalyst::Request Class::Accessor::Fast/;
+
+use Catalyst::Utils;
 use HTTP::Headers::Util qw(split_header_words);
 
 sub _insert_self_into {
-  my ($class, $app) = @_;
+  my ($class, $app_class ) = @_;
+  my $app = Catalyst::Utils::class2appclass( $app_class ) || $app_class;
+
   my $req_class = $app->request_class;
   return if $req_class->isa($class);
   if ($req_class eq 'Catalyst::Request') {
